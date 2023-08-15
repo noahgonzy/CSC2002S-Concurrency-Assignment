@@ -56,11 +56,13 @@ public class Clubgoer extends Thread {
 
 	//check to see if user pressed pause button
 	private void checkPause() {
-		while(GlobalPause.checkpause()){
+		if(GlobalPause.checkpause()){
 			System.out.println("Thread " + this.ID + " is globally paused");
 		}
+		while(GlobalPause.checkpause()){
+		}
 		/*
-		while(PeopleCounter.getInside() == PeopleCounter.getMax()){
+		while(club.counter.overCapacity()){
 			System.out.println("Thread " + this.ID + " is waiting for space");
 		}
 		*/

@@ -2,6 +2,9 @@
 //Grid for the club
 
 package clubSimulation;
+import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.BrokenBarrierException;
+
 
 //This class represents the club as a grid of GridBlocks
 public class ClubGrid {
@@ -14,6 +17,8 @@ public class ClubGrid {
 	private GridBlock entrance; //hard coded entrance
 	private final static int minX =5;//minimum x dimension
 	private final static int minY =5;//minimum y dimension
+	static CyclicBarrier barrier;
+	
 	
 	private PeopleCounter counter;
 	
@@ -71,6 +76,11 @@ public class ClubGrid {
 	}
 	
 	public GridBlock enterClub(PeopleLocation myLocation) throws InterruptedException  {
+		/*
+		if(counter.overCapacity()){
+			throw new InterruptedException("Club is at capacity");
+		}
+		*/
 		counter.personArrived(); //add to counter of people waiting 
 		entrance.get(myLocation.getID());
 		counter.personEntered(); //add to counter
@@ -103,9 +113,9 @@ public class ClubGrid {
 			
 		currentBlock.release(); //must release current block
 		myLocation.setLocation(newBlock);
+
 		return newBlock;
 	} 
-	
 
 	public  void leaveClub(GridBlock currentBlock,PeopleLocation myLocation)   {
 			currentBlock.release();
