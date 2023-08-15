@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.util.Random;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import clubSimulation.GlobalPause;
 
 public class ClubSimulation {
 	static int noClubgoers=20;
@@ -68,7 +69,7 @@ public class ClubSimulation {
 		// add the listener to the jbutton to handle the "pressed" event
 		startB.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e)  {
-			    	  	// THIS DOES NOTHING - MUST BE FIXED  	  
+				GlobalPause.setplay();
 		    }
 		   });
 			
@@ -77,7 +78,7 @@ public class ClubSimulation {
 			// add the listener to the jbutton to handle the "pressed" event
 			pauseB.addActionListener(new ActionListener() {
 		      public void actionPerformed(ActionEvent e) {
-		    		// THIS DOES NOTHING - MUST BE FIXED  	
+				GlobalPause.setpaused();
 		      }
 		    });
 			
@@ -100,8 +101,6 @@ public class ClubSimulation {
         frame.setContentPane(g);     
         frame.setVisible(true);	
 	}
-	
-	
 
 	public static void main(String[] args) throws InterruptedException {
 		

@@ -14,7 +14,7 @@ BINDIR=bin
 DOCDIR=doc
 
 #these are the arguments for the program to run when running "make run"
-ARGS = 10 20 20 30
+ARGS=
 
 #compiling all java programs into their class files
 $(BINDIR)/%.class:$(SRCDIR)/%.java
@@ -26,7 +26,6 @@ CLASS_FILES=$(CLASSES:%.class=$(BINDIR)/%.class)
 
 default: $(CLASS_FILES)
 
-#this will run both the Serial and Parallel versions of the program with the arguments in the "ARGS" variable
 run: $(CLASS_FILES)
 	$(JAVA) -cp bin clubSimulation.ClubSimulation $(ARGS)
 
