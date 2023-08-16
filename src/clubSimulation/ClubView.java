@@ -17,8 +17,9 @@ public class ClubView extends JPanel implements Runnable {
 
 		ClubGrid grid; //shared grid
 		
-		ClubView(PeopleLocation[] custs,  ClubGrid grid,int []exits) { //constructor
+		ClubView(PeopleLocation[] custs, PeopleLocation barmansloc, ClubGrid grid,int []exits) { //constructor
 			this.patronLocations=custs; 
+			this.barpersonLocation = barmansloc;
 			noPatrons = custs.length;
 			this.grid = grid;
 			this.exits=exits;
@@ -77,11 +78,15 @@ public class ClubView extends JPanel implements Runnable {
 		   //draw the ovals representing people in middle of grid block
 			int x,y;
 			 g.setFont(new Font("Helvetica", Font.BOLD, hIncr/2));
-			 
-			 //barman should go here
-			 
+			 /*
+			 g.setColor(Color.black);
+			 x= (barpersonLocation.getX()+1)*wIncr;
+			 y= barpersonLocation.getY()*hIncr;
+			 g.fillOval(x+wIncr/4, y+hIncr/4 , wIncr/2, hIncr/2);
+			 g.drawString(patronLocations[i].getID()+"",x+wIncr/4, y+wIncr/4);
+			 */
 			 //patrons
-		    for (int i=0;i<noPatrons;i++){	    	
+		    for (int i = 0; i<noPatrons; i++){	    	
 		    		if (patronLocations[i].inRoom()) {
 			    		g.setColor(patronLocations[i].getColor());
 			    		x= (patronLocations[i].getX()+1)*wIncr;

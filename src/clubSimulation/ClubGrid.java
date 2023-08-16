@@ -14,7 +14,8 @@ public class ClubGrid {
 	public  final int bar_y;
 	
 	private GridBlock exit;
-	private GridBlock entrance; //hard coded entrance
+	private GridBlock entrance;
+	private GridBlock barmanstart; //hard coded entrance
 	private final static int minX =5;//minimum x dimension
 	private final static int minY =5;//minimum y dimension
 
@@ -32,9 +33,11 @@ public class ClubGrid {
 		this.initGrid(exitBlocks);
 		entrance=Blocks[getMaxX()/2][0];
 		counter=c;
+		barmanstart = Blocks[getMaxX()/2][getMaxY()-1];
+
 		}
 	
-	//initialise the grsi, creating all the GridBlocks
+	//initialise the grid, creating all the GridBlocks
 	private  void initGrid(int []exitBlocks) throws InterruptedException {
 		for (int i=0;i<x;i++) {
 			for (int j=0;j<y;j++) {
@@ -51,12 +54,16 @@ public class ClubGrid {
 		}
 	}
 	
-		public  int getMaxX() {
+	public  int getMaxX() {
 		return x;
 	}
 	
-		public int getMaxY() {
+	public int getMaxY() {
 		return y;
+	}
+
+	public GridBlock getBarmanStart() {
+		return barmanstart;
 	}
 
 	public GridBlock whereEntrance() { 
