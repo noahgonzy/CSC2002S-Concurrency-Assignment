@@ -17,8 +17,8 @@ public class ClubGrid {
 	private GridBlock entrance; //hard coded entrance
 	private final static int minX =5;//minimum x dimension
 	private final static int minY =5;//minimum y dimension
-	static CyclicBarrier barrier;
-	
+
+	static CyclicBarrier barrier = new CyclicBarrier(1);
 	
 	private PeopleCounter counter;
 	
@@ -76,22 +76,33 @@ public class ClubGrid {
 	}
 	
 	public GridBlock enterClub(PeopleLocation myLocation) throws InterruptedException  {
-		/*
 		if(counter.overCapacity()){
-			throw new InterruptedException("Club is at capacity");
+			System.out.println("Thread tried to enter but: Club is at Capacity");
+			throw new InterruptedException();
 		}
-		*/
+		if(entrance.occupied()){
+			System.out.println("Thread tried to enter but: Entrance Blocked");
+			throw new InterruptedException();
+		}
 		counter.personArrived(); //add to counter of people waiting 
 		entrance.get(myLocation.getID());
 		counter.personEntered(); //add to counter
 		myLocation.setLocation(entrance);
 		myLocation.setInRoom(true);
+		if(counter.getInside() > 0){
+			barrier.reset();
+			barrier = new CyclicBarrier(counter.getInside());
+		}
 		return entrance;
 	}
 	
+	//might be changed
+	public boolean clubFull(){
+		return(counter.overCapacity());
+	}
 	
 	public GridBlock move(GridBlock currentBlock,int step_x, int step_y,PeopleLocation myLocation) throws InterruptedException {  //try to move in 
-		
+
 		int c_x= currentBlock.getX();
 		int c_y= currentBlock.getY();
 		
@@ -111,9 +122,20 @@ public class ClubGrid {
 		
 		if (!newBlock.get(myLocation.getID())) return currentBlock; //stay where you are
 			
+		try{
+			barrier.await();
+		}
+		catch (InterruptedException e) 
+        {
+            e.printStackTrace();
+        }
+		catch(BrokenBarrierException e){
+			System.out.println("Barrier broken by new entrance");
+		}
+
 		currentBlock.release(); //must release current block
 		myLocation.setLocation(newBlock);
-
+		
 		return newBlock;
 	} 
 

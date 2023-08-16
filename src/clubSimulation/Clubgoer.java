@@ -6,6 +6,7 @@ import clubSimulation.PeopleCounter;
 import java.util.Random;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.CountDownLatch;
 
 /*
  This is the basic ClubGoer Thread class, representing the patrons at the club
@@ -61,14 +62,9 @@ public class Clubgoer extends Thread {
 		}
 		while(GlobalPause.checkpause()){
 		}
-		/*
-		while(club.counter.overCapacity()){
-			System.out.println("Thread " + this.ID + " is waiting for space");
-		}
-		*/
     }
 	private void startSim() {	
-        //WHAT TO PUT HERE
+        //
     }
 	
 	//get drink at bar
@@ -76,7 +72,7 @@ public class Clubgoer extends Thread {
 			//FIX SO BARMAN GIVES THE DRINK AND IT IS NOT AUTOMATIC
 			thirsty=false;
 			System.out.println("Thread "+this.ID + " got drink at bar position: " + currentBlock.getX()  + " " +currentBlock.getY() );
-			sleep(movingSpeed*5);  //wait a bit
+			//sleep(movingSpeed*5);  //wait a bit
 		}
 		
 	//--------------------------------------------------------

@@ -12,6 +12,7 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import clubSimulation.GlobalPause;
 
+
 public class ClubSimulation {
 	static int noClubgoers=20;
    	static int frameX=400;
@@ -29,6 +30,8 @@ public class ClubSimulation {
 	static ClubView clubView; //threaded panel to display terrain
 	static ClubGrid clubGrid; // club grid
 	static CounterDisplay counterDisplay ; //threaded display of counters
+
+	//static AtomicBoolean pause(false);
 	
 	private static int maxWait=1200; //for the slowest customer
 	private static int minWait=500; //for the fastest cutomer
@@ -121,6 +124,8 @@ public class ClubSimulation {
 	   
 	    peopleLocations = new PeopleLocation[noClubgoers];
 		patrons = new Clubgoer[noClubgoers];
+
+		andre = new Clubgoer(-1, );
 		
 		Random rand = new Random();
 
