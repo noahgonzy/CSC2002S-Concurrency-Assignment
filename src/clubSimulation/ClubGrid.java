@@ -33,7 +33,7 @@ public class ClubGrid {
 		this.initGrid(exitBlocks);
 		entrance=Blocks[getMaxX()/2][0];
 		counter=c;
-		barmanstart = Blocks[getMaxX()/2][getMaxY()-1];
+		barmanstart = Blocks[getMaxX()/2][getMaxY()-2];
 
 		}
 	
