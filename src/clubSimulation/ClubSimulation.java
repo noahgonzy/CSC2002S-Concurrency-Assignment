@@ -11,6 +11,7 @@ import java.util.Random;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import clubSimulation.GlobalPause;
+import java.util.concurrent.CountDownLatch;
 
 
 public class ClubSimulation {
@@ -32,6 +33,10 @@ public class ClubSimulation {
 	static ClubView clubView; //threaded panel to display terrain
 	static ClubGrid clubGrid; // club grid
 	static CounterDisplay counterDisplay ; //threaded display of counters
+
+	static CountDownLatch starter = new CountDownLatch(1);
+	static boolean firstrun = true;
+	static boolean pausemode = true;
 
 	//static AtomicBoolean pause(false);
 	
@@ -69,23 +74,36 @@ public class ClubSimulation {
 	    //Add start, pause and exit buttons
 	    JPanel b = new JPanel();
         b.setLayout(new BoxLayout(b, BoxLayout.LINE_AXIS)); 
+
         JButton startB = new JButton("Start");
         
 		// add the listener to the jbutton to handle the "pressed" event
 		startB.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e)  {
-				GlobalPause.setplay();
+				if(firstrun){
+					starter.countDown();
+					firstrun = false;
+				}
 		    }
-		   });
+		});
 			
-			final JButton pauseB = new JButton("Pause ");;
+		final JButton pauseB = new JButton("Pause");
 			
 			// add the listener to the jbutton to handle the "pressed" event
-			pauseB.addActionListener(new ActionListener() {
-		      public void actionPerformed(ActionEvent e) {
-				GlobalPause.setpaused();
-		      }
-		    });
+		pauseB.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+				if(pausemode){
+					GlobalPause.setpaused();
+					pauseB.setText("Resume");
+					pausemode = false;
+				}
+				else{
+					GlobalPause.setplay();
+					pauseB.setText("Pause");
+					pausemode = true;
+				}
+		    }
+		});
 			
 		JButton endB = new JButton("Quit");
 				// add the listener to the jbutton to handle the "pressed" event
@@ -141,12 +159,23 @@ public class ClubSimulation {
     		}
 		           
 		setupGUI(frameX, frameY,exit);  //Start Panel thread - for drawing animation
+
         //start all the threads
 		Thread t = new Thread(clubView); 
       	t.start();
       	//Start counter thread - for updating counters
       	Thread s = new Thread(counterDisplay);  
       	s.start();
+
+		try{ 
+			System.out.println("Waiting for start");
+			starter.await();
+		}
+		catch (InterruptedException e){
+			e.printStackTrace();
+		}
+
+		System.out.println("Starting");
 
 		andre.start();
       	

@@ -5,11 +5,41 @@ public class Barman extends Thread{
     private int movingSpeed;
     public static ClubGrid club;
     private int ID = -1;
+    private int movedir = 1;
+    private GridBlock currentBlock;
 
     Barman(PeopleLocation loc){
         myLocation = loc;
-		movingSpeed=1200; 
+		movingSpeed = 1200; 
         myLocation.setLocation(club.getBarmanStart());
-        System.out.println("Barman in club as position: " + myLocation.getX() + " " + myLocation.getY());
-	}
+    }
+
+    private void checkPause() {
+        if(GlobalPause.checkpause()){
+			System.out.println("Thread " + this.ID + " is globally paused");
+		}
+		while(GlobalPause.checkpause()){
+		}
+    }
+
+    private void movebarman(){
+        currentBlock = club.movebarman(currentBlock, myLocation);
+
+    }
+
+    public void run(){
+        while(true){
+            checkPause();
+            int x_mv = myLocation.getX() + 1;
+            try{
+                sleep(movingSpeed/5);
+                movebarman();
+                System.out.println(currentBlock.getX());
+                System.out.println("Barman Trying to Move");
+            }
+            catch(InterruptedException e){
+                e.printStackTrace();
+            }  	
+        }
+    }
 }

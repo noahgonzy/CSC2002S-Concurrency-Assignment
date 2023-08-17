@@ -14,8 +14,8 @@ public class ClubGrid {
 	public  final int bar_y;
 	
 	private GridBlock exit;
-	private GridBlock entrance;
-	private GridBlock barmanstart; //hard coded entrance
+	private GridBlock entrance; //hard coded entrance
+	private GridBlock barmanstart; 
 	private final static int minX =5;//minimum x dimension
 	private final static int minY =5;//minimum y dimension
 
@@ -106,6 +106,37 @@ public class ClubGrid {
 	//might be changed
 	public boolean clubFull(){
 		return(counter.overCapacity());
+	}
+
+	static int barmandir = 1;
+
+	public GridBlock movebarman(GridBlock currentBlock, PeopleLocation myLocation){
+		int c_x = currentBlock.getX();
+		int c_y= currentBlock.getY();
+		int new_x;
+
+		if(barmandir == 1){
+			new_x = c_x+1;
+		}
+		else{
+			new_x = c_x-1;
+		};
+
+		if(!inGrid(new_x,c_y)){
+			if(barmandir == 1){
+				barmandir = -1;
+				new_x = c_x - 1;
+			}
+			else{
+				barmandir = 1;
+				new_x = c_x+1;
+			}
+		}
+		
+
+		GridBlock newBlock = Blocks[new_x][c_y];
+		myLocation.setLocation(newBlock);
+		return newBlock;
 	}
 	
 	public GridBlock move(GridBlock currentBlock,int step_x, int step_y,PeopleLocation myLocation) throws InterruptedException {  //try to move in 
