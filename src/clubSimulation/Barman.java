@@ -14,15 +14,21 @@ public class Barman extends Thread{
         myLocation.setLocation(club.getBarmanStart());
     }
 
-    /* 
     private void checkPause() {
 		if(ClubSimulation.paused.get()){
-			System.out.println("Thread " + this.ID + " is globally paused");
+			System.out.println("Thread " + this.ID + " (Barman) is globally paused");
 		}
-		while(ClubSimulation.paused.get()){
+		synchronized(ClubSimulation.paused){
+			try{
+				while(ClubSimulation.paused.get()){
+					ClubSimulation.paused.wait();
+				}
+			}
+			catch(InterruptedException e){
+				e.printStackTrace();
+			}
 		}
     }
-    */
 
     private void movebarman(){
         currentBlock = club.movebarman(currentBlock, myLocation);
@@ -31,7 +37,7 @@ public class Barman extends Thread{
     
     public void run(){
         while(true){
-            //checkPause();
+            checkPause();
             int x_mv = myLocation.getX() + 1;
             try{
                 sleep(movingSpeed/5);
