@@ -88,9 +88,9 @@ public class ClubGrid {
 
 			synchronized(counter){
 			try{
-				barrier.await();
+				barrier.wait();
 			}
-			catch(BrokenBarrierException e){
+			catch(InterruptedException e){
 				e.printStackTrace();
 			}
 		}
@@ -170,15 +170,15 @@ public class ClubGrid {
 	} 
 
 	public void leaveClub(GridBlock currentBlock,PeopleLocation myLocation)   {
-			currentBlock.release();
-			counter.personLeft(); //add to counter
-			myLocation.setInRoom(false);
-			synchronized(entrance){
-				entrance.notifyAll();
-			}
-			synchronized(counter){
-				barrier.notifyAll();
-			}
+		currentBlock.release();
+		counter.personLeft(); //add to counter
+		myLocation.setInRoom(false);
+		synchronized(entrance){
+			entrance.notifyAll();
+		}
+		synchronized(counter){
+			barrier.notifyAll();
+		}
 			
 	}
 
@@ -201,11 +201,4 @@ public class ClubGrid {
 	public int getBar_y() {
 		return bar_y;
 	}
-
 }
-
-
-	
-
-	
-
