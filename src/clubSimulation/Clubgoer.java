@@ -148,14 +148,14 @@ public class Clubgoer extends Thread {
 		try {
 			startSim(); 
 			checkPause();
-			//sleep(movingSpeed*(rand.nextInt(100)+1)); //arriving takes a while
+			sleep(movingSpeed*(rand.nextInt(100)+1)); //arriving takes a while
 			checkPause();
 			myLocation.setArrived();
 			System.out.println("Thread "+ this.ID + " arrived at club"); //output for checking
 			checkPause(); //check whether have been asked to pause
 			enterClub();
 		
-			while (inRoom) {	
+			while (inRoom) {
 				checkPause(); //check every step
 				if((!thirsty)&&(!wantToLeave)) {
 					if (rand.nextInt(100) >95) 
