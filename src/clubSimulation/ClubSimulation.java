@@ -10,7 +10,6 @@ import java.awt.event.ActionListener;
 import java.util.Random;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
-import clubSimulation.GlobalPause;
 import java.util.concurrent.CountDownLatch;
 
 
@@ -35,10 +34,9 @@ public class ClubSimulation {
 	static CounterDisplay counterDisplay ; //threaded display of counters
 
 	static CountDownLatch starter = new CountDownLatch(1);
+	public static AtomicBoolean paused = new AtomicBoolean(false);
 	static boolean firstrun = true;
 	static boolean pausemode = true;
-
-	//static AtomicBoolean pause(false);
 	
 	private static int maxWait=1200; //for the slowest customer
 	private static int minWait=500; //for the fastest cutomer
@@ -93,12 +91,19 @@ public class ClubSimulation {
 		pauseB.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
 				if(pausemode){
-					GlobalPause.setpaused();
+					System.out.println("Pausing the simulation");
+					synchronized(paused){
+						paused.set(true);
+					}
 					pauseB.setText("Resume");
 					pausemode = false;
 				}
 				else{
-					GlobalPause.setplay();
+					System.out.println("Playing the simulation");
+					synchronized(paused){
+						paused.set(false);
+						paused.notifyAll();
+					}
 					pauseB.setText("Pause");
 					pausemode = true;
 				}
@@ -177,7 +182,7 @@ public class ClubSimulation {
 
 		System.out.println("Starting");
 
-		andre.start();
+		//andre.start();
       	
       	for (int i=0;i<noClubgoers;i++) {
 			patrons[i].start();

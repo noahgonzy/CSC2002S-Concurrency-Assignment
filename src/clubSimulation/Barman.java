@@ -14,22 +14,24 @@ public class Barman extends Thread{
         myLocation.setLocation(club.getBarmanStart());
     }
 
+    /* 
     private void checkPause() {
-        if(GlobalPause.checkpause()){
+		if(ClubSimulation.paused.get()){
 			System.out.println("Thread " + this.ID + " is globally paused");
 		}
-		while(GlobalPause.checkpause()){
+		while(ClubSimulation.paused.get()){
 		}
     }
+    */
 
     private void movebarman(){
         currentBlock = club.movebarman(currentBlock, myLocation);
 
     }
-
+    
     public void run(){
         while(true){
-            checkPause();
+            //checkPause();
             int x_mv = myLocation.getX() + 1;
             try{
                 sleep(movingSpeed/5);

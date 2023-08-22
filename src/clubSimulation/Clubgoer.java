@@ -1,7 +1,6 @@
 //M. M. Kuttel 2023 mkuttel@gmail.com
 package clubSimulation;
 
-import clubSimulation.GlobalPause;
 import clubSimulation.PeopleCounter;
 import java.util.Random;
 import java.util.concurrent.*;
@@ -24,7 +23,6 @@ public class Clubgoer extends Thread {
 	private boolean inRoom;
 	private boolean thirsty;
 	private boolean wantToLeave;
-	private boolean paused;
 	
 	private int ID; //thread ID 
 
@@ -57,12 +55,20 @@ public class Clubgoer extends Thread {
 
 	//check to see if user pressed pause button
 	private void checkPause() {
-		if(GlobalPause.checkpause()){
+		if(ClubSimulation.paused.get()){
 			System.out.println("Thread " + this.ID + " is globally paused");
 		}
-		while(GlobalPause.checkpause()){
+		synchronized(ClubSimulation.paused){
+			try{
+				while(ClubSimulation.paused.get()){
+					ClubSimulation.paused.wait();
+				}
+			}
+			catch(InterruptedException e){
+				e.printStackTrace();
+			}
 		}
-    }
+	}
 	private void startSim() {	
         //
     }
@@ -142,7 +148,7 @@ public class Clubgoer extends Thread {
 		try {
 			startSim(); 
 			checkPause();
-			sleep(movingSpeed*(rand.nextInt(100)+1)); //arriving takes a while
+			//sleep(movingSpeed*(rand.nextInt(100)+1)); //arriving takes a while
 			checkPause();
 			myLocation.setArrived();
 			System.out.println("Thread "+ this.ID + " arrived at club"); //output for checking

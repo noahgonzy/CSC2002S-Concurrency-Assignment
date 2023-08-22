@@ -19,7 +19,7 @@ public class ClubGrid {
 	private final static int minX =5;//minimum x dimension
 	private final static int minY =5;//minimum y dimension
 
-	static CyclicBarrier barrier = new CyclicBarrier(1);
+	//static CyclicBarrier barrier = new CyclicBarrier(1);
 	
 	private PeopleCounter counter;
 	
@@ -70,19 +70,19 @@ public class ClubGrid {
 		return entrance;
 	}
 
-	public  boolean inGrid(int i, int j) {
+	public synchronized boolean inGrid(int i, int j) {
 		if ((i>=x) || (j>=y) ||(i<0) || (j<0)) 
 			return false;
 		return true;
 	}
 	
-	public  boolean inPatronArea(int i, int j) {
+	public synchronized boolean inPatronArea(int i, int j) {
 		if ((i>=x) || (j>bar_y) ||(i<0) || (j<0)) 
 			return false;
 		return true;
 	}
 	
-	public GridBlock enterClub(PeopleLocation myLocation) throws InterruptedException  {
+	public synchronized GridBlock enterClub(PeopleLocation myLocation) throws InterruptedException  {
 		if(counter.overCapacity()){
 			System.out.println("Thread tried to enter but: Club is at Capacity");
 			throw new InterruptedException();
@@ -96,10 +96,12 @@ public class ClubGrid {
 		counter.personEntered(); //add to counter
 		myLocation.setLocation(entrance);
 		myLocation.setInRoom(true);
+		/*
 		if(counter.getInside() > 0){
 			barrier.reset();
 			barrier = new CyclicBarrier(counter.getInside());
 		}
+		*/
 		return entrance;
 	}
 	
@@ -139,7 +141,7 @@ public class ClubGrid {
 		return newBlock;
 	}
 	
-	public GridBlock move(GridBlock currentBlock,int step_x, int step_y,PeopleLocation myLocation) throws InterruptedException {  //try to move in 
+	public synchronized GridBlock move(GridBlock currentBlock,int step_x, int step_y,PeopleLocation myLocation) throws InterruptedException {  //try to move in 
 
 		int c_x= currentBlock.getX();
 		int c_y= currentBlock.getY();
@@ -159,7 +161,8 @@ public class ClubGrid {
 		GridBlock newBlock = Blocks[new_x][new_y];
 		
 		if (!newBlock.get(myLocation.getID())) return currentBlock; //stay where you are
-			
+		
+		/* 
 		try{
 			barrier.await();
 		}
@@ -170,6 +173,7 @@ public class ClubGrid {
 		catch(BrokenBarrierException e){
 			System.out.println("Barrier broken by new entrance");
 		}
+		*/
 
 		currentBlock.release(); //must release current block
 		myLocation.setLocation(newBlock);
@@ -177,7 +181,7 @@ public class ClubGrid {
 		return newBlock;
 	} 
 
-	public  void leaveClub(GridBlock currentBlock,PeopleLocation myLocation)   {
+	public synchronized void leaveClub(GridBlock currentBlock,PeopleLocation myLocation)   {
 			currentBlock.release();
 			counter.personLeft(); //add to counter
 			myLocation.setInRoom(false);
