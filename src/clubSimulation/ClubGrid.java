@@ -87,7 +87,6 @@ public class ClubGrid {
 			System.out.println("Thread tried to enter but: Club is at Capacity");
 
 			synchronized(counter){
-				
 			try{
 				barrier.await();
 			}
@@ -174,10 +173,13 @@ public class ClubGrid {
 			currentBlock.release();
 			counter.personLeft(); //add to counter
 			myLocation.setInRoom(false);
-			synchronized(counter){
+			synchronized(entrance){
 				entrance.notifyAll();
 			}
-			barrier.notifyAll();
+			synchronized(counter){
+				barrier.notifyAll();
+			}
+			
 	}
 
 	public GridBlock getExit() {
