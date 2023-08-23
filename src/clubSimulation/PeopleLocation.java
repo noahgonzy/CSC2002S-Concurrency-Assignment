@@ -22,7 +22,7 @@ public class PeopleLocation  { // this is a separate class so don't have to acce
 	}
 	
 	//setter
-	public  void setInRoom(boolean in) {
+	public void setInRoom(boolean in) {
 		this.inRoom.set(in);
 	}
 	
@@ -45,19 +45,19 @@ public class PeopleLocation  { // this is a separate class so don't have to acce
 	}
 
 	//getter
-	public  int getX() { return location.getX();}	
+	public  int getX() {return location.getX();}	
 	
 	//getter
-	public  int getY() {	return location.getY();	}
+	public  int getY() {return location.getY();	}
 	
 	//getter
-	public  int getID() {	return ID;	}
+	public  int getID() {return ID;}
 
 	//getter
 	public  synchronized boolean inRoom() {
 		return inRoom.get();
 	}
 	//getter and setter
-	public synchronized  Color getColor() { return myColor; }
-	public synchronized  void setColor(Color myColor) { this.myColor= myColor; }
+	public synchronized Color getColor() { return myColor; }
+	public synchronized void setColor(Color myColor) { this.myColor= myColor; }
 }
