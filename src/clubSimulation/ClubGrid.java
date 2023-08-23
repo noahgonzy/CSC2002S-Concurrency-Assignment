@@ -2,7 +2,6 @@
 //Grid for the club
 
 package clubSimulation;
-import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.BrokenBarrierException;
 
 
@@ -18,8 +17,6 @@ public class ClubGrid {
 	private GridBlock barmanstart; 
 	private final static int minX =5;//minimum x dimension
 	private final static int minY =5;//minimum y dimension
-
-	static CyclicBarrier barrier;
 	
 	private PeopleCounter counter;
 	
@@ -34,7 +31,6 @@ public class ClubGrid {
 		entrance=Blocks[getMaxX()/2][0];
 		counter=c;
 		barmanstart = Blocks[getMaxX()/2][getMaxY()-2];
-		barrier = new CyclicBarrier(c.getMax());
 	}
 	
 	//initialise the grid, creating all the GridBlocks
@@ -82,13 +78,19 @@ public class ClubGrid {
 		return true;
 	}
 	
-	public synchronized GridBlock enterClub(PeopleLocation myLocation) throws InterruptedException  {
+	public GridBlock enterClub(PeopleLocation myLocation) throws InterruptedException  {
 		counter.personArrived(); //add to counter of people waiting 
-		entrance.get(myLocation.getID());
-		
 		synchronized(entrance){
+			//FIX
+			if(entrance.occupied()){
+				System.out.println("Thread tried to enter but: Club Entrance Blocked");
+				entrance.wait();
+			}
+
+			entrance.get(myLocation.getID());
+
 			if(counter.overCapacity()){
-				System.out.println("Thread tried to enter but: Club is at Capacity / Club entrance blocked");
+				System.out.println("Thread tried to enter but: Club is at Capacity");
 				entrance.wait();
 			}
 		}
@@ -157,6 +159,11 @@ public class ClubGrid {
 		if (!newBlock.get(myLocation.getID())) return currentBlock; //stay where you are
 
 		currentBlock.release(); //must release current block
+		synchronized(entrance){
+			if((currentBlock.getX() == entrance.getX()) && (currentBlock.getY() == entrance.getY())){
+				entrance.notify();
+			}
+		}
 		myLocation.setLocation(newBlock);
 		
 		return newBlock;
