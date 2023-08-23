@@ -151,6 +151,11 @@ public class ClubGrid {
 			return currentBlock;
 		}
 
+		//MAYBE DELETE, PREVENTS PATRONS FROM WALKING BACK ONTO ENTRANCE BLOCK
+		if((new_x == entrance.getX()) && (new_y == entrance.getY())){
+			return currentBlock;
+		}
+
 		if ((new_x==currentBlock.getX())&&(new_y==currentBlock.getY())) //not actually moving
 			return currentBlock;
 		 

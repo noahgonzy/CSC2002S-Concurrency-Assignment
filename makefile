@@ -14,7 +14,7 @@ BINDIR=bin
 DOCDIR=doc
 
 #these are the arguments for the program to run when running "make run"
-ARGS=0 10 10 0
+ARGS=500 20 20 50
 
 #compiling all java programs into their class files
 $(BINDIR)/%.class:$(SRCDIR)/%.java
