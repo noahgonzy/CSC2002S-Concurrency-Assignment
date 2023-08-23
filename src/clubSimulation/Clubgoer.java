@@ -25,6 +25,7 @@ public class Clubgoer extends Thread {
 	private boolean wantToLeave;
 	
 	private int ID; //thread ID 
+	public AtomicBoolean drinkbarrier = new AtomicBoolean(true);
 
 	
 	Clubgoer( int ID,  PeopleLocation loc,  int speed) {
@@ -74,12 +75,19 @@ public class Clubgoer extends Thread {
     }
 	
 	//get drink at bar
-		private void getDrink() throws InterruptedException {
-			//FIX SO BARMAN GIVES THE DRINK AND IT IS NOT AUTOMATIC
+	private void getDrink() throws InterruptedException {
+		synchronized(drinkbarrier){
+			while(drinkbarrier.get()){
+				if(currentBlock.getX() == Barman.currentBlock.getX()){
+					drinkbarrier.set(false);
+				}
+			}
 			thirsty=false;
-			System.out.println("Thread "+this.ID + " got drink at bar position: " + currentBlock.getX()  + " " +currentBlock.getY() );
-			sleep(movingSpeed*5);  
+			System.out.println("Thread "+this.ID + " got drink at bar position: " + currentBlock.getX()  + " " +currentBlock.getY());
+			sleep(movingSpeed*5); 
+			drinkbarrier.set(true);
 		}
+	}
 		
 	//--------------------------------------------------------
 	//DO NOT CHANGE THE CODE BELOW HERE - it is not necessary

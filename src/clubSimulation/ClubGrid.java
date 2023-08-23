@@ -82,24 +82,17 @@ public class ClubGrid {
 		return true;
 	}
 	
-	public GridBlock enterClub(PeopleLocation myLocation) throws InterruptedException  {
-		if(counter.overCapacity()){
-			System.out.println("Thread tried to enter but: Club is at Capacity");
-
-			synchronized(counter){
-			try{
-				barrier.wait();
-			}
-			catch(InterruptedException e){
-				e.printStackTrace();
-			}
-		}
-		}
-		if(entrance.occupied()){
-			System.out.println("Thread tried to enter but: Entrance is Blocked");
-		}
+	public synchronized GridBlock enterClub(PeopleLocation myLocation) throws InterruptedException  {
 		counter.personArrived(); //add to counter of people waiting 
 		entrance.get(myLocation.getID());
+		
+		synchronized(entrance){
+			if(counter.overCapacity()){
+				System.out.println("Thread tried to enter but: Club is at Capacity / Club entrance blocked");
+				entrance.wait();
+			}
+		}
+
 		counter.personEntered(); //add to counter
 		myLocation.setLocation(entrance);
 		myLocation.setInRoom(true);
@@ -113,9 +106,9 @@ public class ClubGrid {
 
 	static int barmandir = 1;
 
-	public GridBlock movebarman(GridBlock currentBlock, PeopleLocation myLocation){
+	public synchronized GridBlock movebarman(GridBlock currentBlock, PeopleLocation myLocation){
 		int c_x = currentBlock.getX();
-		int c_y= currentBlock.getY();
+		int c_y = currentBlock.getY();
 		int new_x;
 
 		if(barmandir == 1){
@@ -174,10 +167,7 @@ public class ClubGrid {
 		counter.personLeft(); //add to counter
 		myLocation.setInRoom(false);
 		synchronized(entrance){
-			entrance.notifyAll();
-		}
-		synchronized(counter){
-			barrier.notifyAll();
+			entrance.notify();
 		}
 			
 	}

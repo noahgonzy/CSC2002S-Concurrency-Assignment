@@ -182,7 +182,7 @@ public class ClubSimulation {
 
 		System.out.println("Starting");
 
-		//andre.start();
+		andre.start();
       	
       	for (int i=0;i<noClubgoers;i++) {
 			patrons[i].start();

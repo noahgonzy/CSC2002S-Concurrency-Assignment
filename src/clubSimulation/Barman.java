@@ -6,12 +6,13 @@ public class Barman extends Thread{
     public static ClubGrid club;
     private int ID = -1;
     private int movedir = 1;
-    private GridBlock currentBlock;
+    public static GridBlock currentBlock;
 
     Barman(PeopleLocation loc){
         myLocation = loc;
 		movingSpeed = 1200; 
         myLocation.setLocation(club.getBarmanStart());
+        currentBlock = club.getBarmanStart();
     }
 
     private void checkPause() {
@@ -32,7 +33,6 @@ public class Barman extends Thread{
 
     private void movebarman(){
         currentBlock = club.movebarman(currentBlock, myLocation);
-
     }
     
     public void run(){
@@ -40,10 +40,8 @@ public class Barman extends Thread{
             checkPause();
             int x_mv = myLocation.getX() + 1;
             try{
-                sleep(movingSpeed/5);
+                sleep(movingSpeed/3);
                 movebarman();
-                System.out.println(currentBlock.getX());
-                System.out.println("Barman Trying to Move");
             }
             catch(InterruptedException e){
                 e.printStackTrace();
