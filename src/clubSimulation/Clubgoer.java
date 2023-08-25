@@ -52,30 +52,34 @@ public class Clubgoer extends Thread {
 	//getter
 	public   int getSpeed() { return movingSpeed; }
 
-	//setter
-
 	//check to see if user pressed pause button
 	private void checkPause() {
+		//Checks the atomic boolean "paused" from club simulation
 		synchronized(ClubSimulation.paused){
 			try{
 				while(ClubSimulation.paused.get()){
+					//tells user that the thread is paused and then waits to be unpaused with the rest of the simulation
                     System.out.println("Thread " + this.ID + " is now paused");
 					ClubSimulation.paused.wait();
 				}
 			}
+			//catching the interrupted exception
 			catch(InterruptedException e){
 				e.printStackTrace();
 			}
 		}
 	}
 	private void startSim() {	
+		//Tells user each thread's speed and confirms the number of threads initiated (can be disabled, mostly for debugging)
         System.out.println("Thread " + this.ID + " initiated with speed " + getSpeed());
     }
 	
 	//get drink at bar
 	private void getDrink() throws InterruptedException {
+		//synchronizes on the current block and then checks if the barman's x is the same as their own at the bar
 		synchronized(currentBlock){
 			while(currentBlock.getX() != Barman.currentBlock.getX()){
+				//wait till the barman notifies their block to check if he's there (which he will be)
 				currentBlock.wait();
 			}
 		}
