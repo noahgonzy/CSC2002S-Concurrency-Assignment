@@ -69,7 +69,7 @@ public class Clubgoer extends Thread {
 		}
 	}
 	private void startSim() {	
-        //
+        System.out.println("Thread " + this.ID + " initiated with speed " + getSpeed());
     }
 	
 	//get drink at bar
