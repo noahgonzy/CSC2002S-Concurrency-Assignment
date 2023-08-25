@@ -25,8 +25,6 @@ public class Clubgoer extends Thread {
 	private boolean wantToLeave;
 	
 	private int ID; //thread ID 
-	public AtomicBoolean drinkbarrier = new AtomicBoolean(true);
-
 	
 	Clubgoer( int ID,  PeopleLocation loc,  int speed) {
 		this.ID=ID;

@@ -24,8 +24,8 @@ public class ClubSimulation {
 	
 	static Clubgoer[] patrons; // array for customer threads
 	static PeopleLocation [] peopleLocations;  //array to keep track of where customers are
-	static PeopleLocation barmansLocation;
-	static Barman andre;
+	static PeopleLocation barmansLocation; //location of barman
+	static Barman andre; //barman to serve drinks
 
 	static PeopleCounter tallys; //counters for number of people inside and outside club
 
@@ -33,10 +33,10 @@ public class ClubSimulation {
 	static ClubGrid clubGrid; // club grid
 	static CounterDisplay counterDisplay ; //threaded display of counters
 
-	static CountDownLatch starter = new CountDownLatch(1);
+	static CountDownLatch starter = new CountDownLatch(1); //countdownlatch to initiate program
 	public static AtomicBoolean paused = new AtomicBoolean(false);
-	static boolean firstrun = true;
-	static boolean pausemode = true;
+	static boolean firstrun = true; //check for if the start button has already been pressed
+	static boolean pausemode = true; //check for if the pause button is in pause mode or resume mode
 	
 	private static int maxWait=1200; //for the slowest customer
 	private static int minWait=500; //for the fastest cutomer
@@ -78,6 +78,7 @@ public class ClubSimulation {
 		// add the listener to the jbutton to handle the "pressed" event
 		startB.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e)  {
+				//if first time run count down the starter and start the program and disable the start button essentialy
 				if(firstrun){
 					starter.countDown();
 					firstrun = false;
@@ -91,19 +92,23 @@ public class ClubSimulation {
 		pauseB.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
 				if(pausemode){
+					//if the button is in pause mode, pause the simulation when pressed
 					System.out.println("Pausing the simulation");
 					synchronized(paused){
 						paused.set(true);
 					}
+					//change button text to say "resume" and set to not pause mode (ie resume mode)
 					pauseB.setText("Resume");
 					pausemode = false;
 				}
 				else{
 					System.out.println("Playing the simulation");
+					//if button is not in pause mode, resume the simulation when pressed
 					synchronized(paused){
 						paused.set(false);
 						paused.notifyAll();
 					}
+					//change button text to say "pause" and set to pause mode
 					pauseB.setText("Pause");
 					pausemode = true;
 				}
@@ -153,6 +158,7 @@ public class ClubSimulation {
 
 		barmansLocation = new PeopleLocation(-1);
 
+		//create a barman named andre who will start at the given barmansLocation
 		andre = new Barman(barmansLocation);
 
 		Random rand = new Random();
@@ -173,6 +179,7 @@ public class ClubSimulation {
       	s.start();
 
 		try{ 
+			//waiting for the countdownlatch to start the simulation
 			System.out.println("Waiting for start");
 			starter.await();
 		}
@@ -182,8 +189,10 @@ public class ClubSimulation {
 
 		System.out.println("Starting");
 
+		//start the barman
 		andre.start();
-      	
+		
+		//start the patrons
       	for (int i=0;i<noClubgoers;i++) {
 			patrons[i].start();
 		}
