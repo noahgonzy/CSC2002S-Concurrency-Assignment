@@ -126,10 +126,16 @@ public class ClubGrid {
 			}
 		}
 		
-
 		GridBlock newBlock = Blocks[new_x][c_y];
 		myLocation.setLocation(newBlock);
 		return newBlock;
+	}
+
+	public void giveDrinks(){
+		GridBlock todrink = Blocks[Barman.currentBlock.getX()][Barman.currentBlock.getY()-1];
+		synchronized(todrink){
+			todrink.notifyAll();
+		}
 	}
 	
 	public synchronized GridBlock move(GridBlock currentBlock,int step_x, int step_y,PeopleLocation myLocation) throws InterruptedException {  //try to move in 

@@ -56,9 +56,6 @@ public class Clubgoer extends Thread {
 
 	//check to see if user pressed pause button
 	private void checkPause() {
-		if(ClubSimulation.paused.get()){
-			System.out.println("Thread " + this.ID + " is globally paused");
-		}
 		synchronized(ClubSimulation.paused){
 			try{
 				while(ClubSimulation.paused.get()){
@@ -76,6 +73,7 @@ public class Clubgoer extends Thread {
 	
 	//get drink at bar
 	private void getDrink() throws InterruptedException {
+		/* 
 		synchronized(drinkbarrier){
 			while(drinkbarrier.get()){
 				if(currentBlock.getX() == Barman.currentBlock.getX()){
@@ -87,6 +85,15 @@ public class Clubgoer extends Thread {
 			sleep(movingSpeed*5); 
 			drinkbarrier.set(true);
 		}
+		*/
+		synchronized(currentBlock){
+			while(currentBlock.getX() != Barman.currentBlock.getX()){
+				currentBlock.wait();
+			}
+		}
+		thirsty=false;
+		System.out.println("Thread "+this.ID + " got drink at bar position: " + currentBlock.getX()  + " " +currentBlock.getY());
+		sleep(movingSpeed*5); 
 	}
 		
 	//--------------------------------------------------------

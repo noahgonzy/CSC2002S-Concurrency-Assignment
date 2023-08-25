@@ -31,8 +31,12 @@ public class Barman extends Thread{
 		}
     }
 
-    private void movebarman(){
+    private void moveBarman(){
         currentBlock = club.movebarman(currentBlock, myLocation);
+    }
+
+    private void giveDrinks(){
+        club.giveDrinks();
     }
     
     public void run(){
@@ -41,7 +45,8 @@ public class Barman extends Thread{
             int x_mv = myLocation.getX() + 1;
             try{
                 sleep(movingSpeed/3);
-                movebarman();
+                moveBarman();
+                giveDrinks();
             }
             catch(InterruptedException e){
                 e.printStackTrace();
