@@ -16,12 +16,10 @@ public class Barman extends Thread{
     }
 
     private void checkPause() {
-		if(ClubSimulation.paused.get()){
-			System.out.println("Thread " + this.ID + " (Barman) is globally paused");
-		}
 		synchronized(ClubSimulation.paused){
 			try{
 				while(ClubSimulation.paused.get()){
+                    System.out.println("Thread " + this.ID + " (Barman) is now paused");
 					ClubSimulation.paused.wait();
 				}
 			}
@@ -44,7 +42,7 @@ public class Barman extends Thread{
             checkPause();
             int x_mv = myLocation.getX() + 1;
             try{
-                sleep(movingSpeed/3);
+                sleep(movingSpeed/2);
                 moveBarman();
                 giveDrinks();
             }

@@ -59,6 +59,7 @@ public class Clubgoer extends Thread {
 		synchronized(ClubSimulation.paused){
 			try{
 				while(ClubSimulation.paused.get()){
+                    System.out.println("Thread " + this.ID + " is now paused");
 					ClubSimulation.paused.wait();
 				}
 			}
@@ -73,19 +74,6 @@ public class Clubgoer extends Thread {
 	
 	//get drink at bar
 	private void getDrink() throws InterruptedException {
-		/* 
-		synchronized(drinkbarrier){
-			while(drinkbarrier.get()){
-				if(currentBlock.getX() == Barman.currentBlock.getX()){
-					drinkbarrier.set(false);
-				}
-			}
-			thirsty=false;
-			System.out.println("Thread "+this.ID + " got drink at bar position: " + currentBlock.getX()  + " " +currentBlock.getY());
-			sleep(movingSpeed*5); 
-			drinkbarrier.set(true);
-		}
-		*/
 		synchronized(currentBlock){
 			while(currentBlock.getX() != Barman.currentBlock.getX()){
 				currentBlock.wait();
