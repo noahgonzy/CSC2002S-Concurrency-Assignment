@@ -4,7 +4,6 @@ public class Barman extends Thread{
     private int movingSpeed; //stores moving speed of barman
     public static ClubGrid club; //sets information of clubgrid
     private int ID = -1; //sets Thread ID to -1
-    private int movedir = 1; //sets default movedir to 1 (right)
     public static GridBlock currentBlock; //stores currnt location of barman
 
     Barman(PeopleLocation loc){
@@ -56,7 +55,6 @@ public class Barman extends Thread{
         while(true){
             //checks if the simualtion is paused
             checkPause();
-            int x_mv = myLocation.getX() + 1;
             try{
                 //sleeps for a specified time, moves and then gives drinks notifying patrons above him
                 sleep(movingSpeed/2);

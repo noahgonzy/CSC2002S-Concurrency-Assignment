@@ -186,7 +186,6 @@ public class ClubGrid {
 		synchronized(entrance){
 			entrance.notify();
 		}
-			
 	}
 
 	public GridBlock getExit() {
