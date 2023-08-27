@@ -1,6 +1,6 @@
 #Parallel Computing make file
 #Noah Gonsenhauser
-#11/04/2023
+#27/07/2023
 
 #this is setup for the java compiler
 JAVAC=/usr/bin/javac
