@@ -68,8 +68,13 @@ public class Clubgoer extends Thread {
 		}
 	}
 	private void startSim() {	
-		//Tells user each thread's speed and confirms the number of threads initiated (can be disabled, mostly for debugging)
-        System.out.println("Thread " + this.ID + " initiated with speed " + getSpeed());
+		try{
+			//waiting for the countdownlatch starter to start the simulation
+			ClubSimulation.starter.await();
+		}
+		catch (InterruptedException e){
+			e.printStackTrace();
+		}	
     }
 	
 	//get drink at bar

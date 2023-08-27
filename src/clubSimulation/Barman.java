@@ -15,7 +15,6 @@ public class Barman extends Thread{
     }
 
     private void checkPause() {
-        
 		synchronized(ClubSimulation.paused){
 		//Checks the atomic boolean "paused" from club simulation
 			try{
@@ -41,8 +40,19 @@ public class Barman extends Thread{
     private void giveDrinks(){
         club.giveDrinks();
     }
+
+    private void startSim(){
+        try{
+			//waiting for the countdownlatch starter to start the simulation
+			ClubSimulation.starter.await();
+		}
+		catch (InterruptedException e){
+			e.printStackTrace();
+		}	
+    }
     
     public void run(){
+        startSim();
         while(true){
             //checks if the simualtion is paused
             checkPause();

@@ -33,7 +33,7 @@ public class ClubSimulation {
 	static ClubGrid clubGrid; // club grid
 	static CounterDisplay counterDisplay ; //threaded display of counters
 
-	static CountDownLatch starter = new CountDownLatch(1); //countdownlatch to initiate program
+	public static CountDownLatch starter = new CountDownLatch(1); //countdownlatch to initiate program
 	public static AtomicBoolean paused = new AtomicBoolean(false);
 	static boolean firstrun = true; //check for if the start button has already been pressed
 	static boolean pausemode = true; //check for if the pause button is in pause mode or resume mode
@@ -81,6 +81,7 @@ public class ClubSimulation {
 				//if first time run count down the starter and start the program and disable the start button essentialy
 				if(firstrun){
 					starter.countDown();
+					System.out.println("Sim Starting");
 					firstrun = false;
 				}
 		    }
@@ -178,16 +179,7 @@ public class ClubSimulation {
       	Thread s = new Thread(counterDisplay);  
       	s.start();
 
-		try{ 
-			//waiting for the countdownlatch to start the simulation
-			System.out.println("Waiting for start");
-			starter.await();
-		}
-		catch (InterruptedException e){
-			e.printStackTrace();
-		}
-
-		System.out.println("Starting");
+		System.out.println("Sim Initiated");
 
 		//start the barman
 		andre.start();
