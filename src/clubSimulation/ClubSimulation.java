@@ -43,7 +43,7 @@ public class ClubSimulation {
 
 	public static void setupGUI(int frameX,int frameY,int [] exits) {
 		// Frame initialize and dimensions
-    	JFrame frame = new JFrame("Boogies"); 
+    	JFrame frame = new JFrame("Club Simulation"); 
     	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     	frame.setSize(frameX, frameY);
     	
